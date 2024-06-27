@@ -17,33 +17,33 @@ type SessionSolver interface {
 	Commit() error
 }
 
-// SessionDB управляет доступом к сессионному соединению с БД.
-type SessionDB interface {
+// GORMSessionDB управляет доступом к сессионному соединению с БД.
+type GORMSessionDB interface {
 	DB(context.Context) *gorm.DB
 }
 
-// SessionAdapter реализует интерфейс Session и инкапсулирует взаимодействие
+// GORMSessionAdapter реализует интерфейс Session и инкапсулирует взаимодействие
 // с зависимостями, зависящими от сессии.
-type SessionAdapter struct {
+type GORMSessionAdapter struct {
 	injector *GORMInjector
 }
 
-// NewSessionAdapter создает новый инстанс SessionAdapter.
-func NewSessionAdapter(db *gorm.DB) *SessionAdapter {
-	return &SessionAdapter{
+// NewGORMSessionAdapter создает новый инстанс SessionAdapter.
+func NewGORMSessionAdapter(db *gorm.DB) *GORMSessionAdapter {
+	return &GORMSessionAdapter{
 		injector: NewGORMInjector(db),
 	}
 }
 
 // Begin запускает сессию для зависимых от сессии объектов.
-func (s *SessionAdapter) Begin(
+func (s *GORMSessionAdapter) Begin(
 	ctx context.Context,
 ) (context.Context, SessionSolver, error) {
 	return s.injector.Inject(ctx)
 }
 
 // DB возвращает соединение с БД из сессии.
-func (s *SessionAdapter) DB(ctx context.Context) *gorm.DB {
+func (s *GORMSessionAdapter) DB(ctx context.Context) *gorm.DB {
 	db, _ := s.injector.ExtractGormDB(ctx)
 	return db
 }

@@ -18,9 +18,9 @@ func (s *Manager) Commit() error {
 	return s.commit()
 }
 
-// newSolver создает экземпляр Manager,
+// newGORMSolver создает экземпляр Manager,
 // связанный с переданным объектом транзакции GORM.
-func newSolver(tx *gorm.DB) *Manager {
+func newGORMSolver(tx *gorm.DB) *Manager {
 	return &Manager{
 		rollback: func() error {
 			return tx.Rollback().Error
@@ -31,9 +31,9 @@ func newSolver(tx *gorm.DB) *Manager {
 	}
 }
 
-// newGORMSolver создает экземпляр Manager,
+// noopSolver создает экземпляр Manager,
 // который не выполняет никаких операций при Rollback и Commit.
-func newGORMSolver() *Manager {
+func noopSolver() *Manager {
 	return &Manager{
 		rollback: func() error {
 			return nil
