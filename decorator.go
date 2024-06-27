@@ -19,10 +19,12 @@ type Decorator struct {
 func NewDecorator(
 	session Session,
 	l *logging.Logger,
+	t trace.Tracer,
 ) *Decorator {
 	return &Decorator{
 		session: session,
 		logger:  l,
+		tracer:  t,
 	}
 }
 
