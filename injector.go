@@ -9,22 +9,22 @@ import (
 
 type transactionKey struct{}
 
-// Injector надстройка, которая позволяет открывать транзакцию,
+// GORMInjector надстройка, которая позволяет открывать транзакцию,
 // передавая контроль над результатом стороннему потребителю,
 // передавая транзакцию через контекст.
-type Injector struct {
+type GORMInjector struct {
 	db *gorm.DB
 }
 
-// NewInjector создает новый экземпляр Injector.
-func NewInjector(db *gorm.DB) *Injector {
-	return &Injector{
+// NewGORMInjector создает новый экземпляр GORMInjector.
+func NewGORMInjector(db *gorm.DB) *GORMInjector {
+	return &GORMInjector{
 		db: db,
 	}
 }
 
 // Inject начинает транзакцию и запечатывает ее в контекст.
-func (c *Injector) Inject(ctx context.Context) (context.Context, *Manager, error) {
+func (c *GORMInjector) Inject(ctx context.Context) (context.Context, *Manager, error) {
 	if _, ok := c.ExtractGormDB(ctx); ok {
 		return ctx, noopSolver(), nil
 	}
@@ -40,7 +40,7 @@ func (c *Injector) Inject(ctx context.Context) (context.Context, *Manager, error
 
 // ExtractGormDB возвращает транзакцию из контеста или создает новую если
 // в контексте транзакция не найдена.
-func (c *Injector) ExtractGormDB(ctx context.Context) (db *gorm.DB, isTx bool) {
+func (c *GORMInjector) ExtractGormDB(ctx context.Context) (db *gorm.DB, isTx bool) {
 	session := &gorm.Session{
 		NewDB:   true,
 		Context: ctx,

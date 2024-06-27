@@ -25,13 +25,13 @@ type SessionDB interface {
 // SessionAdapter реализует интерфейс Session и инкапсулирует взаимодействие
 // с зависимостями, зависящими от сессии.
 type SessionAdapter struct {
-	injector *Injector
+	injector *GORMInjector
 }
 
 // NewSessionAdapter создает новый инстанс SessionAdapter.
 func NewSessionAdapter(db *gorm.DB) *SessionAdapter {
 	return &SessionAdapter{
-		injector: NewInjector(db),
+		injector: NewGORMInjector(db),
 	}
 }
 
