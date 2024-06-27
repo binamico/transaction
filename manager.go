@@ -31,9 +31,9 @@ func newSolver(tx *gorm.DB) *Manager {
 	}
 }
 
-// noopSolver создает экземпляр Manager,
+// newGORMSolver создает экземпляр Manager,
 // который не выполняет никаких операций при Rollback и Commit.
-func noopSolver() *Manager {
+func newGORMSolver() *Manager {
 	return &Manager{
 		rollback: func() error {
 			return nil

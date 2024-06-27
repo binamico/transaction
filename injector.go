@@ -26,7 +26,7 @@ func NewGORMInjector(db *gorm.DB) *GORMInjector {
 // Inject начинает транзакцию и запечатывает ее в контекст.
 func (c *GORMInjector) Inject(ctx context.Context) (context.Context, *Manager, error) {
 	if _, ok := c.ExtractGormDB(ctx); ok {
-		return ctx, noopSolver(), nil
+		return ctx, newGORMSolver(), nil
 	}
 
 	tx := c.db.Begin(&sql.TxOptions{})
